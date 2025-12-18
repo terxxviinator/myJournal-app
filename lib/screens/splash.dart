@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'home.dart'; // ganti sesuai nama file tujuan kamu
+import 'home.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+  final Function(bool) onThemeChanged;
+
+  const SplashScreen({super.key, required this.onThemeChanged});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -17,7 +19,6 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
 
-    // Animasi Fade-in
     _controller = AnimationController(
       duration: const Duration(milliseconds: 3000),
       vsync: this,
@@ -30,11 +31,12 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.forward();
 
-    // Auto navigate setelah 2 detik
     Future.delayed(const Duration(seconds: 2), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const Home()),
+        MaterialPageRoute(
+          builder: (_) => Home(onThemeChanged: widget.onThemeChanged),
+        ),
       );
     });
   }
@@ -48,8 +50,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Center(
         child: AnimatedBuilder(
           animation: _controller,
@@ -58,22 +59,18 @@ class _SplashScreenState extends State<SplashScreen>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Logo berbentuk icon buku
               Icon(
                 Icons.book_rounded,
                 size: 80,
-                color: Colors.blue.shade300, // biru pastel
+                color: Theme.of(context).colorScheme.primary,
               ),
-
               const SizedBox(height: 12),
-
-              // Teks MyJournal
               Text(
                 "MyJournal",
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.w600,
-                  color: Colors.blue.shade400,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
             ],
